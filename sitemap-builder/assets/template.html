@@ -1,0 +1,224 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>__SITE__ Site Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one centered column. Summary strip, controls, then a nested outline where hosts nest paths. */
+  :root {
+    --bg: #f3f6f8;
+    --surface: #ffffff;
+    --fg: #14212b;
+    --muted: #55677a;
+    --line: #d6dfe6;
+    --accent: #0a6f93;
+    --accent-soft: #e1f0f6;
+    --warn: #9a5700;
+    --warn-soft: #fbefdc;
+    --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1418; --surface: #141e25; --fg: #e3ebf0; --muted: #93a6b3; --line: #25343e;
+      --accent: #52bfe3; --accent-soft: #11303b; --warn: #e6a653; --warn-soft: #382a14;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1418; --surface: #141e25; --fg: #e3ebf0; --muted: #93a6b3; --line: #25343e;
+    --accent: #52bfe3; --accent-soft: #11303b; --warn: #e6a653; --warn-soft: #382a14;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--font-body);
+    font-size: 15px; line-height: 1.5; padding-inline: 16px;
+  }
+  .wrap { max-width: 980px; margin-inline: auto; padding-block: 28px 56px; display: grid; gap: 20px; }
+  h1 { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.1rem); line-height: 1.15; margin: 0; font-weight: 600; text-wrap: balance; }
+  h1 span { color: var(--accent); }
+  .lede { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
+  .stats { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; padding: 14px 0; border-block: 1px solid var(--line); }
+  .stats div { display: flex; align-items: baseline; gap: 8px; }
+  .stats dt { color: var(--muted); font-size: 0.85rem; order: 2; }
+  .stats dd { margin: 0; font-family: var(--font-mono); font-size: 1.15rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .stats .warn dd { color: var(--warn); }
+  .controls { display: grid; gap: 12px; }
+  .search { width: 100%; font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); }
+  .search::placeholder { color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  button { font: inherit; cursor: pointer; }
+  .chip, .tool { border: 1px solid var(--line); background: var(--surface); color: var(--fg); padding: 5px 11px; border-radius: 999px; font-size: 0.85rem; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .chip small { font-family: var(--font-mono); opacity: 0.8; margin-left: 4px; }
+  .tool { border-radius: 6px; }
+  .row-tools { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .note { color: var(--muted); font-size: 0.85rem; margin: 0; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .tree { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px 12px; }
+  .tree ul { list-style: none; margin: 0; padding: 0; }
+  .tree ul ul { margin-left: 9px; padding-left: 14px; border-left: 1px solid var(--line); }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 14px; align-items: baseline; padding: 4px 6px; border-radius: 5px; }
+  summary.row:hover, li.leaf > .row:hover { background: var(--accent-soft); }
+  .name { min-width: 0; overflow-wrap: anywhere; font-family: var(--font-mono); font-size: 0.88rem; }
+  summary .name::before { content: "▸"; display: inline-block; width: 1.1em; color: var(--muted); transition: transform 0.12s; }
+  details[open] > summary .name::before { transform: rotate(90deg); }
+  li.leaf > .row .name { padding-left: 1.1em; }
+  .name a { color: var(--accent); text-decoration: none; }
+  .name a:hover { text-decoration: underline; }
+  .meta { display: flex; gap: 10px; align-items: baseline; justify-content: flex-end; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pill { font-family: var(--font-body); font-size: 0.7rem; padding: 0 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); margin-left: 6px; }
+  .pill.warn { background: var(--warn-soft); color: var(--warn); }
+  .group > details > summary .name { font-family: var(--font-body); font-weight: 600; font-size: 1rem; }
+  .group + .group { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); }
+  .host-nonprod .name, .group-nonprod .name { color: var(--warn); }
+  .empty { padding: 24px 8px; color: var(--muted); }
+  .clicks { min-width: 5.5em; text-align: right; }
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 1fr; }
+    .meta { justify-content: flex-start; padding-left: 1.1em; }
+    .clicks { text-align: left; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1><span>__SITE__</span> site map</h1>
+    <p class="lede" id="lede"></p>
+  </header>
+  <dl class="stats" id="stats"></dl>
+  <section class="controls" aria-label="Filters">
+    <input class="search" id="q" type="search" placeholder="Filter by path or host, for example /blog or glossary" aria-label="Filter pages">
+    <div class="chips" id="chips"></div>
+    <div class="row-tools">
+      <p class="note" id="shown"></p>
+      <span><button class="tool" id="expand" type="button">Expand all</button> <button class="tool" id="collapse" type="button">Collapse all</button></span>
+    </div>
+  </section>
+  <main class="tree"><ul id="tree"></ul></main>
+  <p class="note">__NOTE__</p>
+</div>
+
+<script>
+const DATA = __DATA__;
+(function () {
+  var tree = DATA.tree, meta = DATA.meta;
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { q: "", group: "all", open: null };
+  var FLAG_LABEL = { "slash-variants": "slash", "case-variants": "case", "tracking-params": "utm", "query-params": "params", "fragment": "#frag", "www": "www", "http": "http" };
+  var nf = new Intl.NumberFormat("en-US");
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  var nonprod = tree.ch.filter(function (g) { return g.g === "nonprod"; })[0];
+  var langs = {};
+  (function walk(n) { if (n.l) langs[n.l] = 1; n.ch.forEach(walk); })(tree);
+
+  $("lede").textContent = meta.lede;
+  meta.stats.forEach(function (s) {
+    var d = el("div", s[2] || ""); d.appendChild(el("dt", "", s[0])); d.appendChild(el("dd", "", s[1])); $("stats").appendChild(d);
+  });
+
+  function chip(label, count, value) {
+    var b = el("button", "chip", label);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(state.group === value));
+    b.appendChild(el("small", "", nf.format(count)));
+    b.addEventListener("click", function () { state.group = value; drawChips(); render(); });
+    return b;
+  }
+  function drawChips() {
+    var box = $("chips"); box.textContent = "";
+    box.appendChild(chip("All", meta.pages, "all"));
+    tree.ch.forEach(function (g) { box.appendChild(chip(g.n, g.p, g.g)); });
+  }
+
+  var memo;
+  function matches(n, q) {
+    if (!q) return true;
+    if (memo.has(n)) return memo.get(n);
+    var hit = ((n.u || "") + " " + (n.k === "host" ? n.n : "")).toLowerCase().indexOf(q) >= 0 || n.ch.some(function (c) { return matches(c, q); });
+    memo.set(n, hit);
+    return hit;
+  }
+
+  function label(n) {
+    var span = el("span", "name");
+    if (n.u && n.g !== "nonprod") {
+      var a = el("a", "", n.k === "host" ? n.n : n.n);
+      a.href = n.u; a.target = "_blank"; a.rel = "noopener";
+      a.addEventListener("click", function (e) { e.stopPropagation(); });
+      span.appendChild(a);
+    } else {
+      span.appendChild(document.createTextNode(n.n));
+    }
+    if (n.l) span.appendChild(el("span", "pill", n.l));
+    if (n.s) span.appendChild(el("span", n.s === "no search data" ? "pill" : "pill warn", n.s));
+    (n.f || []).forEach(function (f) { span.appendChild(el("span", "pill warn", FLAG_LABEL[f] || f)); });
+    return span;
+  }
+
+  function row(n, tag) {
+    var r = el(tag, "row");
+    r.appendChild(label(n));
+    var m = el("span", "meta");
+    if (n.ch.length) m.appendChild(el("span", "", nf.format(n.p) + (n.p === 1 ? " page" : " pages")));
+    m.appendChild(el("span", "clicks", nf.format(n.c) + (n.c === 1 ? " click" : " clicks")));
+    r.appendChild(m);
+    return r;
+  }
+
+  function build(n, depth, q) {
+    var kids = n.ch.filter(function (c) { return matches(c, q); });
+    var li = el("li");
+    if (n.k === "group") li.className = "group group-" + n.g;
+    if (n.k === "host" && n.g === "nonprod") li.className = "host-nonprod";
+    if (!kids.length) { li.className += " leaf"; li.appendChild(row(n, "div")); return li; }
+    var d = document.createElement("details");
+    var open = state.open === "all" || !!q || (state.open !== "none" && (depth === 0 || (depth === 1 && n.g === "marketing")));
+    d.open = open;
+    d.appendChild(row(n, "summary"));
+    var ul = el("ul");
+    kids.forEach(function (c) { ul.appendChild(build(c, depth + 1, q)); });
+    d.appendChild(ul);
+    li.appendChild(d);
+    return li;
+  }
+
+  function render() {
+    var q = state.q.trim().toLowerCase();
+    memo = new Map();
+    var ul = $("tree"); ul.textContent = "";
+    var shown = 0;
+    tree.ch.forEach(function (g) {
+      if (state.group !== "all" && state.group !== g.g) return;
+      if (!matches(g, q)) return;
+      ul.appendChild(build(g, 0, q));
+      shown += 1;
+    });
+    if (!shown) ul.appendChild(el("li", "empty", "No pages match that filter."));
+    $("shown").textContent = q ? "Filtering by “" + state.q.trim() + "”" : "";
+  }
+
+  var timer;
+  $("q").addEventListener("input", function (e) {
+    clearTimeout(timer);
+    timer = setTimeout(function () { state.q = e.target.value; render(); }, 120);
+  });
+  $("expand").addEventListener("click", function () { state.open = "all"; render(); });
+  $("collapse").addEventListener("click", function () { state.open = "none"; render(); });
+  drawChips();
+  render();
+})();
+</script>
+
+</body></html>
